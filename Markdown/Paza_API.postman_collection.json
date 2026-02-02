@@ -1,0 +1,837 @@
+{
+  "info": {
+    "name": "Paza Backend API",
+    "description": "Complete API testing collection for Paza Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "General",
+      "item": [
+        {
+          "name": "Welcome",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/",
+              "host": ["{{baseUrl}}"],
+              "path": [""]
+            }
+          }
+        },
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"testuser{{$randomInt}}.@example.com\",\n  \"password\": \"Password123!\",\n  \"firstName\": \"Test\",\n  \"lastName\": \"User\",\n  \"birthday\": \"1990-01-01\",\n  \"gender\": \"Male\",\n  \"phone\": \"+1234567890\",\n  \"city\": \"New York\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"alice@example.com\",\n  \"password\": \"Password123!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Me",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "me"]
+            }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"UpdatedName\",\n  \"lastName\": \"UpdatedLast\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"alice@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/forgot-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "forgot-password"]
+            }
+          }
+        },
+        {
+          "name": "Google Auth URL",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login/google/auth-url",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login", "google", "auth-url"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Campaigns",
+      "item": [
+        {
+          "name": "Get All Campaigns",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/campaigns",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "campaigns"]
+            }
+          }
+        },
+        {
+          "name": "Create Campaign",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Test Campaign {{$randomInt}}\",\n  \"description\": \"Campaign description\",\n  \"budget\": 5000,\n  \"goals\": [\"Goal 1\", \"Goal 2\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/campaigns",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "campaigns"]
+            }
+          }
+        },
+        {
+          "name": "Get Campaign by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/campaigns/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "campaigns", "1"]
+            }
+          }
+        },
+        {
+          "name": "Search Campaigns",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/campaigns/search?q=campaign",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "campaigns", "search"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "campaign"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Milestone",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Milestone 1\",\n  \"description\": \"First milestone\",\n  \"objectives\": [\"Objective 1\"],\n  \"start\": \"2025-01-01\",\n  \"end\": \"2025-02-01\",\n  \"budget\": 1000\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/campaigns/1/milestones",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "campaigns", "1", "milestones"]
+            }
+          }
+        },
+        {
+          "name": "Add Team",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Team A\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/campaigns/1/teams",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "campaigns", "1", "teams"]
+            }
+          }
+        },
+        {
+          "name": "Add Feedback",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"email\": \"john@example.com\",\n  \"feedback\": \"Great campaign!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/campaigns/1/feedback",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "campaigns", "1", "feedback"]
+            }
+          }
+        },
+        {
+          "name": "Get Campaign Feedback",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/campaigns/1/feedback",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "campaigns", "1", "feedback"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Jobs",
+      "item": [
+        {
+          "name": "Get All Jobs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/jobs",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "jobs"]
+            }
+          }
+        },
+        {
+          "name": "Create Job",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Content Creator Needed {{$randomInt}}\",\n  \"description\": \"Create videos for our campaign\",\n  \"category\": \"Content Creation\",\n  \"payment\": \"5000\",\n  \"gender\": \"Any\",\n  \"availability\": \"Full-time\",\n  \"location\": \"Remote\",\n  \"age\": \"18+\",\n  \"experience\": \"2+ years\",\n  \"priority\": \"High\",\n  \"visibility\": \"Public\",\n  \"skills\": [\"Video Editing\"],\n  \"platforms\": [\"TikTok\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/jobs",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "jobs"]
+            }
+          }
+        },
+        {
+          "name": "Get Job by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/jobs/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "jobs", "1"]
+            }
+          }
+        },
+        {
+          "name": "Search Jobs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/jobs/search?q=creator",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "jobs", "search"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "creator"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Jobs by Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/jobs/category/Content%20Creation",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "jobs", "category", "Content%20Creation"]
+            }
+          }
+        },
+        {
+          "name": "Create Proposal",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"I can do this\",\n  \"description\": \"I have experience\",\n  \"proposedBudget\": \"4500\",\n  \"deliverables\": [\"10 videos\", \"Thumbnails\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/jobs/1/proposals",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "jobs", "1", "proposals"]
+            }
+          }
+        },
+        {
+          "name": "Get Job Proposals",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/jobs/1/proposals",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "jobs", "1", "proposals"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Collaborations",
+      "item": [
+        {
+          "name": "Send Invitation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"inviteeEmail\": \"creator@example.com\",\n  \"role\": \"Contributor\",\n  \"collaborationType\": \"Campaign\",\n  \"campaignId\": 1,\n  \"message\": \"Join our campaign\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/collaborations/invite",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "collaborations", "invite"]
+            }
+          }
+        },
+        {
+          "name": "Get My Invitations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/collaborations/my-invitations",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "collaborations", "my-invitations"]
+            }
+          }
+        },
+        {
+          "name": "Get Pending Invitations",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/collaborations/pending",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "collaborations", "pending"]
+            }
+          }
+        },
+        {
+          "name": "Accept Invitation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"collaborationId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/collaborations/accept",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "collaborations", "accept"]
+            }
+          }
+        },
+        {
+          "name": "Reject Invitation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"collaborationId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/collaborations/reject",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "collaborations", "reject"]
+            }
+          }
+        },
+        {
+          "name": "Get Campaign Collaborators",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/collaborations/campaign/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "collaborations", "campaign", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Business Collaborators",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/collaborations/business/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "collaborations", "business", "1"]
+            }
+          }
+        },
+        {
+          "name": "Update Collaborator Role",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"role\": \"Lead\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/collaborations/1/role",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "collaborations", "1", "role"]
+            }
+          }
+        },
+        {
+          "name": "Remove Collaborator",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/collaborations/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "collaborations", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Brands",
+      "item": [
+        {
+          "name": "Get Brand Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/1/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "1", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Update About",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"about\": \"We are a leading brand...\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/1/about",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "1", "about"]
+            }
+          }
+        },
+        {
+          "name": "Update Mission",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"mission\": \"Our mission is to...\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/1/mission",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "1", "mission"]
+            }
+          }
+        },
+        {
+          "name": "Update Values",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"values\": [\"Innovation\", \"Integrity\", \"Excellence\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/1/values",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "1", "values"]
+            }
+          }
+        },
+        {
+          "name": "Update Social Links",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"instagram\": \"@brand\",\n  \"twitter\": \"@brand\",\n  \"facebook\": \"brand\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/1/social-links",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "1", "social-links"]
+            }
+          }
+        },
+        {
+          "name": "Update Target Audience",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"targetAudience\": \"Tech enthusiasts and entrepreneurs\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/1/target-audience",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "1", "target-audience"]
+            }
+          }
+        },
+        {
+          "name": "Update Industry",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"industry\": \"Technology\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/1/industry",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "1", "industry"]
+            }
+          }
+        },
+        {
+          "name": "Update Budget",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"budget\": 50000\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/brands/1/budget",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "brands", "1", "budget"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Social Verification",
+      "item": [
+        {
+          "name": "Get YouTube Auth",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/social-verification/youtube/auth",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "social-verification", "youtube", "auth"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

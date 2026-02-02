@@ -1,0 +1,418 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "alice@example.com",
+      "password": "$2b$10$d0l51UDQkMDwtG5kA3tOrOCOf9lo.U1h2Vm3gj1TfsYKlz.Euq3Qm",
+      "firstName": "Alice",
+      "lastName": "Anderson",
+      "birthday": null,
+      "gender": null,
+      "phone": null,
+      "city": null,
+      "isVerified": true,
+      "accountType": "Individual",
+      "verificationToken": null,
+      "verificationTokenExpiry": null,
+      "resetPasswordToken": null,
+      "resetPasswordExpiry": null,
+      "createdAt": "2025-12-01T10:36:31.077Z",
+      "updatedAt": "2025-12-01T10:36:31.077Z"
+    },
+    {
+      "id": 2,
+      "email": "creator@example.com",
+      "password": "$2b$10$d0l51UDQkMDwtG5kA3tOrOCOf9lo.U1h2Vm3gj1TfsYKlz.Euq3Qm",
+      "firstName": "Cara",
+      "lastName": "Creator",
+      "birthday": null,
+      "gender": null,
+      "phone": null,
+      "city": null,
+      "isVerified": true,
+      "accountType": "Creator",
+      "verificationToken": null,
+      "verificationTokenExpiry": null,
+      "resetPasswordToken": null,
+      "resetPasswordExpiry": null,
+      "createdAt": "2025-12-01T10:36:32.413Z",
+      "updatedAt": "2025-12-01T10:36:32.413Z"
+    }
+  ],
+  "creatorProfiles": [
+    {
+      "id": 3,
+      "creatorname": "Cara Creator",
+      "about": "I create awesome content",
+      "main": "Content Creation",
+      "followers": "50000",
+      "instagram": "@cara_creator",
+      "tiktok": "@cara_creator",
+      "twitter": "@cara_creator",
+      "youtube": "Cara Creator",
+      "linkedin": null,
+      "facebook": null,
+      "social": null,
+      "experience": "5 years in content creation",
+      "milestones": "Reached 50k followers",
+      "collabs": null,
+      "category": "Tech & Gaming",
+      "subCategory": [
+        "Programming",
+        "Game Dev"
+      ],
+      "corevalue": "Innovation",
+      "coreValues": [
+        "Authenticity",
+        "Quality",
+        "Innovation"
+      ],
+      "subCoreValues": null,
+      "topics": [
+        "Web Development",
+        "Game Development",
+        "Tutorial"
+      ],
+      "avatar": "https://example.com/avatar.jpg",
+      "preview": "https://example.com/preview.jpg",
+      "profileUrl": "https://example.com/cara",
+      "audienceType": "Tech",
+      "preferredFormat": "Video",
+      "collaborationPreference": "Paid collaborations",
+      "industryPreference": "Technology",
+      "community": "Tech Creators",
+      "rating": 4,
+      "createdAt": "2025-12-08T06:20:52.017Z",
+      "updatedAt": "2025-12-08T06:33:26.599Z",
+      "user": {
+        "id": 2,
+        "email": "creator@example.com",
+        "password": "$2b$10$d0l51UDQkMDwtG5kA3tOrOCOf9lo.U1h2Vm3gj1TfsYKlz.Euq3Qm",
+        "firstName": "Cara",
+        "lastName": "Creator",
+        "birthday": null,
+        "gender": null,
+        "phone": null,
+        "city": null,
+        "isVerified": true,
+        "accountType": "Creator",
+        "verificationToken": null,
+        "verificationTokenExpiry": null,
+        "resetPasswordToken": null,
+        "resetPasswordExpiry": null,
+        "createdAt": "2025-12-01T10:36:32.413Z",
+        "updatedAt": "2025-12-01T10:36:32.413Z"
+      }
+    }
+  ],
+  "campaigns": [
+    {
+      "id": 1,
+      "title": "Seed Campaign",
+      "description": "Campaign created by seed script",
+      "goals": [
+        "reach users",
+        "test seed"
+      ],
+      "budget": "1000",
+      "active": true,
+      "createdby": "creator@example.com",
+      "cocampaign": null,
+      "jobId": null,
+      "createdAt": "2025-12-01T10:40:46.074Z",
+      "updatedAt": "2025-12-01T10:40:46.074Z",
+      "milestones": [],
+      "teams": [],
+      "feedback": []
+    }
+  ],
+  "jobs": [
+    {
+      "id": 1,
+      "title": "Seed: Social Media Content Creator",
+      "description": "Create sample short-form videos for campaign",
+      "gender": "Any",
+      "availability": "Part-time",
+      "location": "Remote",
+      "category": "Content Creation",
+      "age": "18+",
+      "experience": "2+ years",
+      "priority": "High",
+      "visibility": "Public",
+      "payment": "5000",
+      "paymentdesc": "per project",
+      "link": "https://example.com/job",
+      "years": "2",
+      "goals": [
+        "Create 10 videos"
+      ],
+      "skills": [
+        "Video Editing",
+        "Storytelling"
+      ],
+      "contents": [
+        "TikTok",
+        "Reels"
+      ],
+      "platforms": [
+        "TikTok",
+        "Instagram"
+      ],
+      "owner_id": 2,
+      "business_id": null,
+      "isActive": true,
+      "createdAt": "2025-12-01T10:40:46.631Z",
+      "updatedAt": "2025-12-01T10:40:46.631Z",
+      "owner": {
+        "id": 2,
+        "email": "creator@example.com",
+        "password": "$2b$10$d0l51UDQkMDwtG5kA3tOrOCOf9lo.U1h2Vm3gj1TfsYKlz.Euq3Qm",
+        "firstName": "Cara",
+        "lastName": "Creator",
+        "birthday": null,
+        "gender": null,
+        "phone": null,
+        "city": null,
+        "isVerified": true,
+        "accountType": "Creator",
+        "verificationToken": null,
+        "verificationTokenExpiry": null,
+        "resetPasswordToken": null,
+        "resetPasswordExpiry": null,
+        "createdAt": "2025-12-01T10:36:32.413Z",
+        "updatedAt": "2025-12-01T10:36:32.413Z"
+      },
+      "proposals": [
+        {
+          "id": 1,
+          "title": "I can deliver high-quality videos",
+          "description": "Experienced creator ready to start",
+          "proposedBudget": "4500",
+          "deliverables": [
+            "10 TikTok videos",
+            "Thumbnails"
+          ],
+          "proposer_id": 1,
+          "status": "pending",
+          "createdAt": "2025-12-01T10:40:47.269Z",
+          "updatedAt": "2025-12-01T10:40:47.269Z"
+        }
+      ]
+    }
+  ],
+  "proposals": [
+    {
+      "id": 1,
+      "title": "I can deliver high-quality videos",
+      "description": "Experienced creator ready to start",
+      "proposedBudget": "4500",
+      "deliverables": [
+        "10 TikTok videos",
+        "Thumbnails"
+      ],
+      "proposer_id": 1,
+      "status": "pending",
+      "createdAt": "2025-12-01T10:40:47.269Z",
+      "updatedAt": "2025-12-01T10:40:47.269Z",
+      "proposer": {
+        "id": 1,
+        "email": "alice@example.com",
+        "password": "$2b$10$d0l51UDQkMDwtG5kA3tOrOCOf9lo.U1h2Vm3gj1TfsYKlz.Euq3Qm",
+        "firstName": "Alice",
+        "lastName": "Anderson",
+        "birthday": null,
+        "gender": null,
+        "phone": null,
+        "city": null,
+        "isVerified": true,
+        "accountType": "Individual",
+        "verificationToken": null,
+        "verificationTokenExpiry": null,
+        "resetPasswordToken": null,
+        "resetPasswordExpiry": null,
+        "createdAt": "2025-12-01T10:36:31.077Z",
+        "updatedAt": "2025-12-01T10:36:31.077Z"
+      },
+      "job": {
+        "id": 1,
+        "title": "Seed: Social Media Content Creator",
+        "description": "Create sample short-form videos for campaign",
+        "gender": "Any",
+        "availability": "Part-time",
+        "location": "Remote",
+        "category": "Content Creation",
+        "age": "18+",
+        "experience": "2+ years",
+        "priority": "High",
+        "visibility": "Public",
+        "payment": "5000",
+        "paymentdesc": "per project",
+        "link": "https://example.com/job",
+        "years": "2",
+        "goals": [
+          "Create 10 videos"
+        ],
+        "skills": [
+          "Video Editing",
+          "Storytelling"
+        ],
+        "contents": [
+          "TikTok",
+          "Reels"
+        ],
+        "platforms": [
+          "TikTok",
+          "Instagram"
+        ],
+        "owner_id": 2,
+        "business_id": null,
+        "isActive": true,
+        "createdAt": "2025-12-01T10:40:46.631Z",
+        "updatedAt": "2025-12-01T10:40:46.631Z",
+        "proposals": [
+          {
+            "id": 1,
+           "title": "I can deliver high-quality videos",
+            "description": "Experienced creator ready to start",
+            "proposedBudget": "4500",
+            "deliverables": [
+              "10 TikTok videos",
+              "Thumbnails"
+            ],
+            "proposer_id": 1,
+            "status": "pending",
+            "createdAt": "2025-12-01T10:40:47.269Z",
+            "updatedAt": "2025-12-01T10:40:47.269Z"
+          }
+        ]
+      }
+    }
+  ],
+  "collaborations": [
+    {
+      "id": 1,
+      "collaborationType": "Campaign",
+      "inviteeEmail": "alice@example.com",
+      "role": "Contributor",
+      "status": "Accepted",
+      "message": "Welcome to the campaign",
+      "expiresAt": null,
+      "acceptedAt": "2025-12-01T13:40:47.940Z",
+      "invitationToken": "40cf49a752f7482672dbfd6189547e0539126943cfa5d16216ba30158d93d1fd",
+      "createdAt": "2025-12-01T10:40:48.016Z",
+      "updatedAt": "2025-12-01T10:40:48.016Z",
+      "inviter": {
+        "id": 2,
+        "email": "creator@example.com",
+        "password": "$2b$10$d0l51UDQkMDwtG5kA3tOrOCOf9lo.U1h2Vm3gj1TfsYKlz.Euq3Qm",
+        "firstName": "Cara",
+        "lastName": "Creator",
+        "birthday": null,
+        "gender": null,
+        "phone": null,
+        "city": null,
+        "isVerified": true,
+        "accountType": "Creator",
+        "verificationToken": null,
+        "verificationTokenExpiry": null,
+        "resetPasswordToken": null,
+        "resetPasswordExpiry": null,
+        "createdAt": "2025-12-01T10:36:32.413Z",
+        "updatedAt": "2025-12-01T10:36:32.413Z"
+      },
+      "invitee": {
+        "id": 1,
+        "email": "alice@example.com",
+        "password": "$2b$10$d0l51UDQkMDwtG5kA3tOrOCOf9lo.U1h2Vm3gj1TfsYKlz.Euq3Qm",
+        "firstName": "Alice",
+        "lastName": "Anderson",
+        "birthday": null,
+        "gender": null,
+        "phone": null,
+        "city": null,
+        "isVerified": true,
+        "accountType": "Individual",
+        "verificationToken": null,
+        "verificationTokenExpiry": null,
+        "resetPasswordToken": null,
+        "resetPasswordExpiry": null,
+        "createdAt": "2025-12-01T10:36:31.077Z",
+        "updatedAt": "2025-12-01T10:36:31.077Z"
+      },
+      "campaign": {
+        "id": 1,
+        "title": "Seed Campaign",
+        "description": "Campaign created by seed script",
+        "goals": [
+          "reach users",
+          "test seed"
+        ],
+        "budget": "1000",
+        "active": true,
+        "createdby": "creator@example.com",
+        "cocampaign": null,
+        "jobId": null,
+        "createdAt": "2025-12-01T10:40:46.074Z",
+        "updatedAt": "2025-12-01T10:40:46.074Z",
+        "milestones": [],
+        "teams": [],
+        "feedback": []
+      },
+      "business": null
+    }
+  ],
+  "businesses": [
+    {
+      "id": 1,
+      "name": "Seed Brand Co",
+      "website": "https://brand.example.com",
+      "email": "contact@seedbrand.example.com",
+      "address": "123 Seed St",
+      "city": "Sample City",
+      "country": "Wonderland",
+      "industry": "Consumer Goods",
+      "logo": "https://example.com/brand-logo.png",
+      "createdAt": "2025-12-01T10:50:00.000Z",
+      "updatedAt": "2025-12-08T23:42:00.000Z"
+    }
+  ],
+  "brandProfiles": [
+    {
+      "id": 1,
+      "brandname": "Seed Brand Updated",
+      "description": "Seed Brand Co is a sample brand created for testing the BrandProfile feature.",
+      "tagline": "Better every day",
+      "website": "https://brand.example.com",
+      "industry": "Consumer Goods",
+      "email": "contact@seedbrand.example.com",
+      "phone": "+1234567890",
+      "address": "123 Seed St",
+      "city": "Sample City",
+      "country": "Wonderland",
+      "foundedYear": "2018",
+      "employees": "25",
+      "mission": "Make sample products that delight users",
+      "values": ["Sustainability","Quality","Community"],
+      "instagram": "@seedbrand",
+      "twitter": "@seedbrand",
+      "linkedin": "seedbrand",
+      "facebook": "seedbrand",
+      "youtube": "SeedBrandChannel",
+      "tiktok": "@seedbrand",
+      "logo": "https://example.com/brand-logo.png",
+      "coverImage": "https://example.com/brand-cover.jpg",
+      "partnerships": ["Partner A","Partner B"],
+      "awards": ["Best Sample 2022"],
+      "testimonials": "Our customers love Seed Brand.",
+      "categories": ["Lifestyle","Consumer"],
+      "createdAt": "2025-12-08T06:40:00.000Z",
+      "updatedAt": "2025-12-08T23:42:00.000Z",
+      "business": {
+        "id": 1,
+        "name": "Seed Brand Updated",
+        "website": "https://brand.example.com",
+        "email": "contact@seedbrand.example.com"
+      }
+    }
+  ]
+}
