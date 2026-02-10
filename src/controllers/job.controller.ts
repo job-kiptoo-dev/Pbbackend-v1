@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import jobService from "../services/job.service";
 import { JobCreateRequest } from "../types/job.types";
-import { 
-  ValidationError, 
-  AuthorizationError, 
-  NotFoundError 
+import {
+  ValidationError,
+  AuthorizationError,
+  NotFoundError
 } from "../services/job.service";
 import { ProposalStatus } from "../db/entity/Job.entity";
 
@@ -24,7 +24,7 @@ export class JobController {
         });
       }
 
-      const { owner, business, values, goals, skills, contents, platforms } = 
+      const { owner, business, values, goals, skills, contents, platforms } =
         req.body as JobCreateRequest & { business?: string };
 
       if (!owner || !values || !values.title || !values.description) {
@@ -48,7 +48,6 @@ export class JobController {
         req.user.id
       );
 
-      console.log(job);
 
       return res.status(201).json({
         success: true,
