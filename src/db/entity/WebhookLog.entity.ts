@@ -38,7 +38,7 @@ export class WebhookLog extends BaseEntity {
 
     // Unique reference from the provider (e.g. Paystack transaction reference).
     // Combined with provider + eventType forms the idempotency key.
-    @Column({ nullable: true })
+    @Column({ type: "varchar", nullable: true })
     reference: string | null;
 
     // Full raw webhook payload stored for debugging and replay

@@ -3,6 +3,7 @@ import { User } from "../db/entity/User";
 import { Business } from "../db/entity/Business.entity";
 import { BusinessMember } from "../db/entity/BusinessMember.entity";
 import { JobValues, JobCreateRequest } from "../types/job.types";
+import escrowService from "./escrow.service";
 
 // Custom error classes
 export class ValidationError extends Error {
@@ -140,7 +141,7 @@ export class JobService {
 
     const savedJob = await job.save();
     console.log("✅ Job created successfully with ID:", savedJob.id);
-    
+
     return savedJob;
   }
 
@@ -489,7 +490,21 @@ export class JobService {
     }
 
     proposal.status = status;
-    return await proposal.save();
+    const savedProposal = await proposal.save();
+
+    // -- PHASE 1 Integration: Escrow Trigger --
+    if (status === ProposalStatus.ACCEPTED) {
+      try {
+        console.log(`[JobService] Proposal ${proposalId} accepted, triggering escrow creation...`);
+        await escrowService.createFromJobProposal(proposalId, requesterId);
+      } catch (escrowError) {
+        console.error(`[JobService] Failed to create escrow for accepted proposal ${proposalId}:`, escrowError);
+        // We log but don't fail the proposal acceptance since the proposal status is already updated.
+        // In a future phase, we might want to make this atomic or flag for manual retry.
+      }
+    }
+
+    return savedProposal;
   }
 
   /**

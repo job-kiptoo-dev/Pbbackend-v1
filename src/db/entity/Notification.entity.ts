@@ -56,7 +56,7 @@ export class Notification extends BaseEntity {
 
     // Optional reference to the related escrow transaction.
     // Allows the frontend to link the notification to the escrow detail page.
-    @Column({ nullable: true })
+    @Column({ type: "int", nullable: true })
     escrowId: number | null;
 
     // Arbitrary metadata for frontend rendering (e.g. amount, party names)

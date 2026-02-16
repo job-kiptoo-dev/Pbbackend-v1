@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import serviceRequestService from "../services/service-request.service";
+import escrowService from "../services/escrow.service";
 
 class ServiceRequestController {
   /**
@@ -207,7 +208,7 @@ class ServiceRequestController {
   async updateServiceRequestStatus(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { status } = req.body;
+      const { status, creatorId } = req.body;
       const userId = (req as any).user?.id;
 
       if (!id || !status) {
@@ -242,6 +243,21 @@ class ServiceRequestController {
         parseInt(id),
         status
       );
+
+      // -- PHASE 1 Integration: Escrow Trigger --
+      if (status === "In Progress") {
+        try {
+          if (creatorId) {
+            console.log(`[ServiceRequestController] Service Request ${id} hired, triggering escrow creation...`);
+            await escrowService.createFromServiceRequest(parseInt(id), Number(creatorId), userId!);
+          } else {
+            console.warn(`[ServiceRequestController] Service Request ${id} changed to "In Progress" but no creatorId found. Escrow skipped.`);
+          }
+        } catch (escrowError) {
+          console.error(`[ServiceRequestController] Failed to create escrow for service request ${id}:`, escrowError);
+          // Don't fail the update since the status is already updated
+        }
+      }
 
       return res.status(200).json({
         message: "Service request status updated",

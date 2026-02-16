@@ -1,76 +1,79 @@
 import { Request, Response } from "express";
 import campaignService from "../services/campaign.service";
+import escrowService from "../services/escrow.service";
+import { Campaign } from "../db/entity/Campaign.entity";
+import { User } from "../db/entity/User";
 
 export class CampaignController {
   public async createCampaign(req: Request, res: Response): Promise<Response> {
-try {
-    // Log the incoming request for debugging
-    console.log('Request body:', req.body);
-    console.log('Content-Type:', req.headers['content-type']);
-    
-    const { title, description, goals, budget, createdby, cocampaign, jobId,milestones } = req.body;
+    try {
+      // Log the incoming request for debugging
+      console.log('Request body:', req.body);
+      console.log('Content-Type:', req.headers['content-type']);
 
-    // Validation with detailed error messages
-    if (!req.body || Object.keys(req.body).length === 0) {
-      return res.status(400).json({
-        error: "Bad Request",
-        message: "Request body is empty or invalid JSON",
-        details: "Please ensure you're sending valid JSON data with Content-Type: application/json"
+      const { title, description, goals, budget, createdby, cocampaign, jobId, milestones } = req.body;
+
+      // Validation with detailed error messages
+      if (!req.body || Object.keys(req.body).length === 0) {
+        return res.status(400).json({
+          error: "Bad Request",
+          message: "Request body is empty or invalid JSON",
+          details: "Please ensure you're sending valid JSON data with Content-Type: application/json"
+        });
+      }
+
+      if (!title || title.trim() === "") {
+        return res.status(400).json({
+          error: "Validation Error",
+          message: "Campaign title is required",
+          details: "The 'title' field must be provided and cannot be empty"
+        });
+      }
+
+      // Optional: Add more validations
+      if (title.length > 200) {
+        return res.status(400).json({
+          error: "Validation Error",
+          message: "Campaign title is too long",
+          details: "Title must be 200 characters or less"
+        });
+      }
+
+      if (budget && (isNaN(Number(budget)) || Number(budget) < 0)) {
+        return res.status(400).json({
+          error: "Validation Error",
+          message: "Invalid budget value",
+          details: "Budget must be a positive number"
+        });
+      }
+
+      const campaign = await campaignService.createCampaign({
+        title: title.trim(),
+        description: description?.trim(),
+        goals,
+        budget: budget ? Number(budget) : 0,
+        createdby,
+        cocampaign,
+        jobId,
+        milestones
       });
-    }
 
-    if (!title || title.trim() === "") {
-      return res.status(400).json({
-        error: "Validation Error",
-        message: "Campaign title is required",
-        details: "The 'title' field must be provided and cannot be empty"
+      return res.status(201).json({
+        success: true,
+        message: "Campaign created successfully",
+        data: campaign,
       });
-    }
+    } catch (error) {
+      console.error("Create campaign error:", error);
 
-    // Optional: Add more validations
-    if (title.length > 200) {
-      return res.status(400).json({
-        error: "Validation Error",
-        message: "Campaign title is too long",
-        details: "Title must be 200 characters or less"
-      });
-    }
-
-    if (budget && (isNaN(Number(budget)) || Number(budget) < 0)) {
-      return res.status(400).json({
-        error: "Validation Error",
-        message: "Invalid budget value",
-        details: "Budget must be a positive number"
-      });
-    }
-
-    const campaign = await campaignService.createCampaign({
-      title: title.trim(),
-      description: description?.trim(),
-      goals,
-      budget: budget ? Number(budget) : 0,
-      createdby,
-      cocampaign,
-      jobId,
-      milestones
-    });
-
-    return res.status(201).json({
-      success: true,
-      message: "Campaign created successfully",
-      data: campaign,
-    });
-  } catch (error) {
-    console.error("Create campaign error:", error);
-    
-    // Handle specific error types
-    if (error instanceof Error) {
-      return res.status(500).json({
-        error: "Internal Server Error",
-        message: "Failed to create campaign",
-        details: process.env.NODE_ENV === 'development' ? error.message : undefined
-      });
-    }
+      // Handle specific error types
+      if (error instanceof Error) {
+        return res.status(500).json({
+          error: "Internal Server Error",
+          message: "Failed to create campaign",
+          details: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
+      }
       return res.status(500).json({
         error: "Campaign creation failed",
         message: "Internal server error while creating campaign",
@@ -141,7 +144,19 @@ try {
         });
       }
 
-      const { title, description, goals, budget, active, cocampaign } = req.body;
+      const { title, description, goals, budget, active, cocampaign, creatorId } = req.body;
+
+      // If creatorId is provided, we associate the creator with the campaign
+      if (creatorId) {
+        const campaign = await Campaign.findOne({ where: { id: campaignId } });
+        if (campaign) {
+          const creator = await User.findOne({ where: { id: Number(creatorId) } });
+          if (creator) {
+            campaign.creator = creator;
+            await campaign.save();
+          }
+        }
+      }
 
       const campaign = await campaignService.updateCampaign(campaignId, {
         title,
@@ -157,6 +172,22 @@ try {
           error: "Campaign not found",
           message: `Campaign with ID ${campaignId} not found`,
         });
+      }
+
+      // -- PHASE 1 Integration: Escrow Trigger --
+      if (active === true || active === "true") {
+        try {
+          const targetCreatorId = creatorId || campaign.creator?.id;
+          if (targetCreatorId) {
+            console.log(`[CampaignController] Campaign ${campaignId} activated, triggering escrow creation...`);
+            await escrowService.createFromCampaign(campaignId, Number(targetCreatorId), req.user!.id);
+          } else {
+            console.warn(`[CampaignController] Campaign ${campaignId} activated but no creatorId found. Escrow skipped.`);
+          }
+        } catch (escrowError) {
+          console.error(`[CampaignController] Failed to create escrow for activated campaign ${campaignId}:`, escrowError);
+          // Don't fail the update since the campaign is already updated
+        }
       }
 
       return res.status(200).json({
