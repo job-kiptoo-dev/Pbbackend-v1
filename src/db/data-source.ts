@@ -23,17 +23,16 @@ dotenv.config();
 
 const AppDataSource = new DataSource({
 
- type: "postgres",
+  type: "postgres",
 
+  url: process.env.DB_URL,
   host: process.env.DB_HOST || "postgres",
   port: Number(process.env.DB_PORT) || 5432,
   username: process.env.DB_USERNAME || "postgres",
   password: process.env.DB_PASSWORD || "postgres",
   database: process.env.DB_DATABASE || "paza_db",
 
-  // ssl: isRender
-  //   ? { rejectUnauthorized: false }
-  //   : false,
+  ssl: { rejectUnauthorized: false },
   //
   entities: [
     User,

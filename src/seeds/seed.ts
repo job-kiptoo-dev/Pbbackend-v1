@@ -56,101 +56,126 @@ async function seed() {
     }
 
     // Create CreatorProfile
-    const profile = new CreatorProfile();
-    profile.user = creator;
-    profile.profileUrl = "https://example.com/cara";
-    profile.experience = "3 years";
-    profile.audienceType = "Tech";
-    profile.preferredFormat = "Video";
-    profile.collaborationPreference = "Paid collaborations";
-    profile.industryPreference = "Technology";
-    profile.community = "Tech Creators";
-    profile.rating = 4;
-    console.log("Seeding: saving creator profile...");
-    await profile.save();
-    console.log("Seeding: saved profile ->", profile.id);
+    let profile = await CreatorProfile.findOne({ where: { user: { id: creator.id } } });
+    if (profile) {
+      console.log("Seeding: CreatorProfile already exists ->", profile.id);
+    } else {
+      profile = new CreatorProfile();
+      profile.user = creator;
+      profile.profileUrl = "https://example.com/cara";
+      profile.experience = "3 years";
+      profile.audienceType = "Tech";
+      profile.preferredFormat = "Video";
+      profile.collaborationPreference = "Paid collaborations";
+      profile.industryPreference = "Technology";
+      profile.community = "Tech Creators";
+      profile.rating = 4;
+      console.log("Seeding: saving creator profile...");
+      await profile.save();
+      console.log("Seeding: saved profile ->", profile.id);
+    }
 
     // Create a sample campaign
-    const campaign = new Campaign();
-    campaign.title = "Seed Campaign";
-    campaign.description = "Campaign created by seed script";
-    campaign.goals = ["reach users", "test seed"];
-    campaign.budget = 1000 as any;
-    campaign.createdby = creator.email;
-    campaign.cocampaign = null as any;
-    campaign.jobId = null as any;
-    campaign.active = true;
-    campaign.milestones = [] as any;
-    campaign.teams = [] as any;
-    campaign.feedback = [] as any;
-    console.log("Seeding: saving campaign...");
-    await campaign.save();
-    console.log("Seeding: saved campaign ->", campaign.id);
+    let campaign = await Campaign.findOne({ where: { title: "Seed Campaign", createdby: creator.email } });
+    if (campaign) {
+      console.log("Seeding: Campaign already exists ->", campaign.id);
+    } else {
+      campaign = new Campaign();
+      campaign.title = "Seed Campaign";
+      campaign.description = "Campaign created by seed script";
+      campaign.goals = ["reach users", "test seed"];
+      campaign.budget = 1000 as any;
+      campaign.createdby = creator.email;
+      campaign.cocampaign = null as any;
+      campaign.jobId = null as any;
+      campaign.active = true;
+      campaign.milestones = [] as any;
+      campaign.teams = [] as any;
+      campaign.feedback = [] as any;
+      console.log("Seeding: saving campaign...");
+      await campaign.save();
+      console.log("Seeding: saved campaign ->", campaign.id);
+    }
 
     // Create a sample job owned by creator
-    const job = Job.create({
-      title: "Seed: Social Media Content Creator",
-      description: "Create sample short-form videos for campaign",
-      gender: "Any",
-      availability: "Part-time",
-      location: "Remote",
-      category: "Content Creation",
-      age: "18+",
-      experience: "2+ years",
-      priority: "High",
-      visibility: "Public",
-      payment: "5000",
-      paymentdesc: "per project",
-      link: "https://example.com/job",
-      years: "2",
-      goals: ["Create 10 videos"],
-      skills: ["Video Editing", "Storytelling"],
-      contents: ["TikTok", "Reels"],
-      platforms: ["TikTok", "Instagram"],
-      owner: creator,
-      owner_id: creator.id,
-      proposals: [],
-      isActive: true,
-    });
+    let job = await Job.findOne({ where: { title: "Seed: Social Media Content Creator", owner: { id: creator.id } } });
+    if (job) {
+      console.log("Seeding: Job already exists ->", job.id);
+    } else {
+      job = Job.create({
+        title: "Seed: Social Media Content Creator",
+        description: "Create sample short-form videos for campaign",
+        gender: "Any",
+        availability: "Part-time",
+        location: "Remote",
+        category: "Content Creation",
+        age: "18+",
+        experience: "2+ years",
+        priority: "high" as any,
+        visibility: "public" as any,
+        payment: "5000",
+        paymentdesc: "per project",
+        link: "https://example.com/job",
+        years: "2",
+        goals: ["Create 10 videos"],
+        skills: ["Video Editing", "Storytelling"],
+        contents: ["TikTok", "Reels"],
+        platforms: ["TikTok", "Instagram"],
+        owner: creator,
+        owner_id: creator.id,
+        proposals: [],
+        isActive: true,
+      });
 
-    console.log("Seeding: saving job...");
-    await job.save();
-    console.log("Seeding: saved job ->", job.id);
+      console.log("Seeding: saving job...");
+      await job.save();
+      console.log("Seeding: saved job ->", job.id);
+    }
 
     // Create a proposal from user1
-    const proposal = JobProposal.create({
-      title: "I can deliver high-quality videos",
-      description: "Experienced creator ready to start",
-      proposedBudget: "4500",
-      deliverables: ["10 TikTok videos", "Thumbnails"],
-      job,
-      proposer: user1,
-      proposer_id: user1.id,
-      status: "pending",
-    });
+    let proposal = await JobProposal.findOne({ where: { job: { id: job.id }, proposer: { id: user1.id } } });
+    if (proposal) {
+      console.log("Seeding: Proposal already exists ->", proposal.id);
+    } else {
+      proposal = JobProposal.create({
+        title: "I can deliver high-quality videos",
+        description: "Experienced creator ready to start",
+        proposedBudget: "4500",
+        deliverables: ["10 TikTok videos", "Thumbnails"],
+        job,
+        proposer: user1,
+        proposer_id: user1.id,
+        status: "pending" as any,
+      });
 
-    console.log("Seeding: saving proposal...");
-    await proposal.save();
-    console.log("Seeding: saved proposal ->", proposal.id);
+      console.log("Seeding: saving proposal...");
+      await proposal.save();
+      console.log("Seeding: saved proposal ->", proposal.id);
+    }
 
     // Add a collaboration invite from creator to user1
-    const collab = new CollaborationEntity();
-    collab.collaborationType = "Campaign";
-    collab.campaign = campaign;
-    collab.business = null as any;
-    collab.inviter = creator;
-    collab.invitee = user1;
-    collab.inviteeEmail = user1.email;
-    collab.role = "Contributor" as any;
-    collab.status = "Accepted" as any;
-    collab.message = "Welcome to the campaign";
-    collab.expiresAt = null as any;
-    collab.acceptedAt = new Date();
-    collab.invitationToken = generateVerificationToken();
+    let collab = await CollaborationEntity.findOne({ where: { campaign: { id: campaign.id }, invitee: { id: user1.id } } });
+    if (collab) {
+      console.log("Seeding: Collaboration already exists ->", collab.id);
+    } else {
+      collab = new CollaborationEntity();
+      collab.collaborationType = "Campaign";
+      collab.campaign = campaign;
+      collab.business = null as any;
+      collab.inviter = creator;
+      collab.invitee = user1;
+      collab.inviteeEmail = user1.email;
+      collab.role = "Contributor" as any;
+      collab.status = "Accepted" as any;
+      collab.message = "Welcome to the campaign";
+      collab.expiresAt = null as any;
+      collab.acceptedAt = new Date();
+      collab.invitationToken = generateVerificationToken();
 
-    console.log("Seeding: saving collaboration...");
-    await collab.save();
-    console.log("Seeding: saved collaboration ->", collab.id);
+      console.log("Seeding: saving collaboration...");
+      await collab.save();
+      console.log("Seeding: saved collaboration ->", collab.id);
+    }
 
     console.log("Seeding complete:");
     console.log(" - user:", user1.email);
