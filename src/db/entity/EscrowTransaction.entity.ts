@@ -83,21 +83,21 @@ export class EscrowTransaction extends BaseEntity {
     // Exactly one of these groups will be populated, depending on how the
     // escrow was triggered. We use nullable columns instead of a polymorphic
     // relation for simplicity and query performance.
-    @Column({ nullable: true })
+    @Column({ type: "int", nullable: true })
     @Index()
     jobId: number | null;
 
-    @Column({ nullable: true })
+    @Column({ type: "int", nullable: true })
     jobProposalId: number | null;
 
-    @Column({ nullable: true })
+    @Column({ type: "int", nullable: true })
     @Index()
     campaignId: number | null;
 
-    @Column({ nullable: true })
+    @Column({ type: "int", nullable: true })
     serviceRequestId: number | null;
 
-    @Column({ nullable: true })
+    @Column({ type: "int", nullable: true })
     campaignMilestoneId: number | null;
 
     // -- Amounts (all in KES kobo / cents) --
@@ -171,7 +171,7 @@ export class EscrowTransaction extends BaseEntity {
     disputeReason: string | null;
 
     // userId of the party who raised the dispute
-    @Column({ nullable: true })
+    @Column({ type: "int", nullable: true })
     disputeRaisedBy: number | null;
 
     @Column({ type: "timestamp", nullable: true })
@@ -188,7 +188,7 @@ export class EscrowTransaction extends BaseEntity {
     splitPercent: number | null;
 
     // -- Cancellation --
-    @Column({ nullable: true })
+    @Column({ type: "int", nullable: true })
     cancelledBy: number | null;
 
     @Column({ type: "text", nullable: true })
