@@ -33,12 +33,12 @@ export class EscrowEvent extends BaseEntity {
     escrowId: number;
 
     // If this event relates to a specific milestone payment (optional)
-    @Column({ nullable: true })
+    @Column({ type: "int", nullable: true })
     milestonePaymentId: number | null;
 
     // The user who triggered this event (null for system-generated events
     // like auto-release or webhook processing)
-    @Column({ nullable: true })
+    @Column({ type: "int", nullable: true })
     actorId: number | null;
 
     // Machine-readable event type. Convention: snake_case.
@@ -57,7 +57,7 @@ export class EscrowEvent extends BaseEntity {
     metadata: Record<string, any> | null;
 
     // IP address of the request that triggered this event (for fraud detection)
-    @Column({ nullable: true })
+    @Column({ type: "varchar", nullable: true })
     ipAddress: string | null;
 
     // Immutable timestamp -- this is when the event was recorded

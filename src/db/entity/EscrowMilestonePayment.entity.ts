@@ -92,7 +92,7 @@ export class EscrowMilestonePayment extends BaseEntity {
     rejectionReason: string | null;
 
     // Paystack transfer reference for this specific milestone payout
-    @Column({ nullable: true })
+    @Column({ type: "varchar", nullable: true })
     paystackTransferRef: string | null;
 
     @CreateDateColumn()

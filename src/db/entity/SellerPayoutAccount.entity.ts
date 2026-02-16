@@ -50,21 +50,21 @@ export class SellerPayoutAccount extends BaseEntity {
 
     // -- M-PESA fields (populated when payoutMethod === "mpesa") --
     // Phone number in local format: e.g. "0712345678"
-    @Column({ nullable: true })
+    @Column({ type: "varchar", nullable: true })
     mpesaNumber: string | null;
 
     // -- Bank fields (populated when payoutMethod === "bank") --
-    @Column({ nullable: true })
+    @Column({ type: "varchar", nullable: true })
     bankAccountNumber: string | null;
 
     // Paystack bank code (e.g. "033" for UBA). Retrieved from Paystack
     // "List Banks" API filtered for Kenya.
-    @Column({ nullable: true })
+    @Column({ type: "varchar", nullable: true })
     bankCode: string | null;
 
     // Resolved account name from Paystack's "Resolve Account Number" API.
     // Stored for display and verification purposes.
-    @Column({ nullable: true })
+    @Column({ type: "varchar", nullable: true })
     bankName: string | null;
 
     // Paystack Transfer Recipient code (e.g. "RCP_xxxxxxxx").

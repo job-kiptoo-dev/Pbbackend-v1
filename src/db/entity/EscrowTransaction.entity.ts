@@ -126,21 +126,21 @@ export class EscrowTransaction extends BaseEntity {
 
     // -- Paystack references --
     // paystackPaymentRef: unique reference for the buyer's payment transaction
-    @Column({ nullable: true })
+    @Column({ type: "varchar", nullable: true })
     paystackPaymentRef: string | null;
 
     // paystackAccessCode: Paystack checkout session code (used for hosted page)
-    @Column({ nullable: true })
+    @Column({ type: "varchar", nullable: true })
     paystackAccessCode: string | null;
 
     // paystackTransferRef: reference for the seller payout transfer
-    @Column({ nullable: true })
+    @Column({ type: "varchar", nullable: true })
     paystackTransferRef: string | null;
 
     // -- Seller payout snapshot --
     // Captured at the moment of release to protect against seller changing
     // payout details mid-escrow.
-    @Column({ nullable: true })
+    @Column({ type: "varchar", nullable: true })
     sellerRecipientCode: string | null;
 
     @Column({ nullable: true, type: "enum", enum: PayoutMethod })
@@ -208,7 +208,7 @@ export class EscrowTransaction extends BaseEntity {
 
     // -- Descriptive metadata --
     // title: snapshot of the job/campaign title at creation time
-    @Column({ nullable: true })
+    @Column({ type: "varchar", nullable: true })
     title: string | null;
 
     @Column({ type: "text", nullable: true })
