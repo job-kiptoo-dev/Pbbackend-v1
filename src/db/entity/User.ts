@@ -51,6 +51,15 @@ export class User extends BaseEntity {
   })
   accountType: "Individual" | "Business" | "Creator" | "None";
 
+  // Role for authorization. "admin" users can resolve disputes,
+  // view all escrows, and access admin-only endpoints.
+  @Column({
+    type: "enum",
+    enum: ["user", "admin"],
+    default: "user",
+  })
+  role: "user" | "admin";
+
   @Column({ nullable: true })
   verificationToken?: string;
 

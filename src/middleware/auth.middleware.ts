@@ -43,7 +43,7 @@ export const authenticate = async (
         error: "Authentication failed",
         message: "User not found",
       });
-      return 
+      return
     }
 
     // Attach user to request object
@@ -75,6 +75,22 @@ export const authenticate = async (
 //   // For now, we'll just pass through this middleware
 //  return  next();
 // };
-export const requireAdmin = (req: Request, res: Response, next: NextFunction) => {
-  return next();
+export const requireAdmin = (req: Request, res: Response, next: NextFunction): void => {
+  if (!req.user) {
+    res.status(401).json({
+      error: "Authentication required",
+      message: "You must be logged in",
+    });
+    return;
+  }
+
+  if (req.user.role !== "admin") {
+    res.status(403).json({
+      error: "Access denied",
+      message: "Admin privileges required",
+    });
+    return;
+  }
+
+  next();
 };

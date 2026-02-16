@@ -15,6 +15,12 @@ import { CollaborationEntity } from "./entity/Collaboration.entity";
 import { Job, JobProposal } from "./entity/Job.entity";
 import { BrandProfile } from "./entity/BrandProfile.entity";
 import { ServiceRequest } from "./entity/ServiceRequest.entity";
+import { EscrowTransaction } from "./entity/EscrowTransaction.entity";
+import { EscrowMilestonePayment } from "./entity/EscrowMilestonePayment.entity";
+import { EscrowEvent } from "./entity/EscrowEvent.entity";
+import { WebhookLog } from "./entity/WebhookLog.entity";
+import { SellerPayoutAccount } from "./entity/SellerPayoutAccount.entity";
+import { Notification } from "./entity/Notification.entity";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -50,6 +56,13 @@ const AppDataSource = new DataSource({
     JobProposal,
     BrandProfile,
     ServiceRequest,
+    // -- Escrow entities (Phase 1) --
+    EscrowTransaction,
+    EscrowMilestonePayment,
+    EscrowEvent,
+    WebhookLog,
+    SellerPayoutAccount,
+    Notification,
   ],
 
   synchronize: true,
