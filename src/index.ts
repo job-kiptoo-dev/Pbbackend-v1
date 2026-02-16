@@ -11,6 +11,8 @@ import collaborationRoutes from "./routes/collaboration.routes";
 import jobRoutes from "./routes/job.routes";
 import brandRoutes from "./routes/brand.routes";
 import serviceRequestRoutes from "./routes/service-request.routes";
+import escrowRoutes from "./routes/escrow.routes";
+import { startAutoReleaseJob } from "./jobs/autoRelease.job";
 
 // Load environment variables
 dotenv.config();
@@ -96,6 +98,22 @@ app.use("/api/collaborations", collaborationRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/brands", brandRoutes);
 app.use("/api/creators-campaign", serviceRequestRoutes);
+
+// ─── Escrow & Notifications (Phase 1) ──────────────────────────────
+// These routes use their own /api/... prefixes defined in the router.
+app.use(escrowRoutes);
+
+// ─── Phase 2: Paystack Webhook ─────────────────────────────────────
+// IMPORTANT: When implementing Phase 2, register the webhook route
+// BEFORE express.json() middleware (it needs raw body for signature
+// verification). Move this block above the middleware section.
+// app.post(
+//   '/webhooks/paystack',
+//   express.raw({ type: 'application/json' }),
+//   paystackWebhookHandler
+// );
+// ────────────────────────────────────────────────────────────────────
+
 // 404 handler
 app.use("*", (req: Request, res: Response) => {
   res.status(404).json({
@@ -120,6 +138,10 @@ app.use((err: Error, req: Request, res: Response, next: any) => {
 AppDataSource.initialize()
   .then(() => {
     console.log("Data Source has been initialized!");
+
+    // Start escrow auto-release cron job
+    startAutoReleaseJob();
+
     app.listen(PORT, () => {
       console.log(`🚀 Server is running on port ${PORT}`);
       console.log(`📍 http://localhost:${PORT}`);
