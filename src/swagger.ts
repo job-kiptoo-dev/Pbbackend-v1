@@ -26,6 +26,14 @@ const options = {
       },
     ],
     components: {
+      securitySchemes: {
+        BearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+          description: "Enter your JWT token",
+        },
+      },
       schemas: {
         HealthResponse: {
           type: "object",
@@ -70,8 +78,13 @@ const options = {
         },
       },
     },
+    security: [
+      {
+        BearerAuth: [],
+      },
+    ],
   },
-  apis: ["./src/*.ts", "./src/routes/*.ts"], 
+  apis: ["./src/*.ts", "./src/routes/*.ts"],
 };
 
 const specs = swaggerJSDoc(options);
