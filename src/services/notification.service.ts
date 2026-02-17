@@ -20,7 +20,7 @@ import { Notification } from "../db/entity/Notification.entity";
 
 export interface CreateNotificationParams {
     userId: number;
-    type: string;           // e.g. "escrow.created", "escrow.funded"
+    type: string;           // e.g. "escrow.created", "payment.confirmed", "payout.confirmed"
     title: string;
     message: string;
     escrowId?: number;

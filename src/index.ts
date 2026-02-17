@@ -13,6 +13,7 @@ import brandRoutes from "./routes/brand.routes";
 import serviceRequestRoutes from "./routes/service-request.routes";
 import escrowRoutes from "./routes/escrow.routes";
 import { startAutoReleaseJob } from "./jobs/autoRelease.job";
+import { paystackWebhookHandler } from "./webhooks/paystack.webhook";
 
 // Load environment variables
 dotenv.config();
@@ -23,6 +24,16 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(helmet());
 app.use(cors());
+
+// ─── Phase 2: Paystack Webhook ─────────────────────────────────────
+// Must be registered BEFORE express.json() to get raw body
+app.post(
+  "/webhooks/paystack",
+  express.raw({ type: "application/json" }),
+  paystackWebhookHandler
+);
+// ────────────────────────────────────────────────────────────────────
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

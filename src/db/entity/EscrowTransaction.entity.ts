@@ -166,6 +166,22 @@ export class EscrowTransaction extends BaseEntity {
     @Column({ type: "int", default: 7 })
     inspectionPeriodDays: number;
 
+    // -- Phase 2: Webhook Tracking --
+    @Column({ type: "timestamp", nullable: true })
+    paymentConfirmedAt: Date | null; // charge.success
+
+    @Column({ type: "timestamp", nullable: true })
+    transferConfirmedAt: Date | null; // transfer.success
+
+    @Column({ type: "timestamp", nullable: true })
+    transferFailedAt: Date | null; // transfer.failed or transfer.reversed
+
+    @Column({ type: "varchar", nullable: true })
+    transferFailReason: string | null;
+
+    @Column({ type: "timestamp", nullable: true })
+    refundConfirmedAt: Date | null; // refund.processed
+
     // -- Dispute fields --
     @Column({ type: "text", nullable: true })
     disputeReason: string | null;

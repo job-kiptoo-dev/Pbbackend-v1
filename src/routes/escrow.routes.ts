@@ -213,6 +213,27 @@ router.post("/api/escrow/:id/verify-payment", authenticate, escrowController.ver
 
 /**
  * @swagger
+ * /api/escrow/{id}/payment-callback:
+ *   get:
+ *     summary: Handle Paystack payment redirect
+ *     tags: [Escrow]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *       - in: query
+ *         name: reference
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       302:
+ *         description: Redirects to frontend
+ */
+router.get("/api/escrow/:id/payment-callback", escrowController.paymentCallback);
+
+/**
+ * @swagger
  * /api/escrow/{id}/start:
  *   post:
  *     summary: Seller marks work as started

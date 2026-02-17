@@ -163,6 +163,54 @@ class EscrowController {
         }
     };
 
+    /**
+     * GET /api/escrow/:id/payment-callback
+     * Handle browser redirect from Paystack after payment.
+     * Redirects buyer to frontend success/failure page.
+     */
+    paymentCallback = async (req: Request, res: Response): Promise<void> => {
+        const escrowId = req.params.id;
+        const reference = req.query.reference as string;
+        const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+
+        if (!reference) {
+            return res.redirect(`${frontendUrl}/payment/failed?reason=missing_reference`);
+        }
+
+        try {
+            // 1. Verify payment with Paystack
+            const tx = await paystackService.verifyPayment(reference);
+
+            if (tx.status !== "success") {
+                return res.redirect(`${frontendUrl}/escrow/${escrowId}/payment-failed?reason=${tx.status}`);
+            }
+
+            // 2. Mark as funded (idempotent)
+            // We need to find the escrow first to get the buyerId for auth check mock
+            // In a callback, we don't have a session usually, so we trust the reference match
+            // The service method expects a userId for "actor" logging.
+            // We can use the buyerId from the escrow transaction itself.
+            const { EscrowTransaction } = require("../db/entity/EscrowTransaction.entity");
+            const escrow = await EscrowTransaction.findOne({ where: { paystackPaymentRef: reference } });
+
+            if (!escrow) {
+                return res.redirect(`${frontendUrl}/payment/failed?reason=not_found`);
+            }
+
+            // If already funded, just redirect
+            if (escrow.status === EscrowStatus.PENDING) {
+                await escrowService.verifyAndMarkFunded(escrow.id, escrow.buyerId);
+            }
+
+            // 3. Redirect to success page
+            return res.redirect(`${frontendUrl}/escrow/${escrowId}/payment-success`);
+
+        } catch (error) {
+            console.error("[PaymentCallback] Error:", error);
+            return res.redirect(`${frontendUrl}/payment/failed?reason=server_error`);
+        }
+    };
+
     // ----------------------------------------------------------
     // Lifecycle
     // ----------------------------------------------------------
@@ -763,6 +811,6 @@ class EscrowController {
             error: "An unexpected error occurred",
         });
     }
-}
+};
 
 export default new EscrowController();
