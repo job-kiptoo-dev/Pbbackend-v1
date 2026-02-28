@@ -11,10 +11,19 @@ import { google } from "googleapis";
 export class AuthController {
   public async register(req: Request, res: Response): Promise<Response> {
     try {
-      const { email, password, firstname, lastname, birthday, gender, phone, city } = req.body;
-      
+      const { email, password, firstname, lastname, birthday, gender, phone, city, accountType } = req.body;
+
       const firstName = firstname;
       const lastName = lastname;
+
+      // Validate accountType if provided
+      const validAccountTypes = ["Individual", "Business", "Creator", "None"];
+      if (accountType && !validAccountTypes.includes(accountType)) {
+        return res.status(400).json({
+          error: "Registration failed",
+          message: `Invalid account type. Must be one of: ${validAccountTypes.join(", ")}`,
+        });
+      }
 
       const userExists = await User.findOne({ where: { email } });
       if (userExists) {
@@ -32,7 +41,8 @@ export class AuthController {
       user.password = hashedPassword;
       user.firstName = firstName;
       user.lastName = lastName;
-      
+      user.accountType = accountType || "None";
+
       if (birthday) user.birthday = new Date(birthday);
       if (gender) user.gender = gender;
       if (phone) user.phone = phone;
@@ -43,7 +53,7 @@ export class AuthController {
       user.verificationTokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
       await user.save();
-      
+
       // Send verification email
       // try {
       //   await emailService.sendVerificationEmail(
@@ -140,10 +150,10 @@ export class AuthController {
   // }
 
   public async verifyEmail(req: Request, res: Response): Promise<Response> {
-  return res.status(200).json({
-    message: "Email verification is currently disabled."
-  });
-}
+    return res.status(200).json({
+      message: "Email verification is currently disabled."
+    });
+  }
 
 
   // public async resendVerification(req: Request, res: Response): Promise<Response> {
@@ -193,10 +203,10 @@ export class AuthController {
   // }
 
   public async resendVerification(req: Request, res: Response): Promise<Response> {
-  return res.status(200).json({
-    message: "Verification system is temporarily disabled.",
-  });
-}
+    return res.status(200).json({
+      message: "Verification system is temporarily disabled.",
+    });
+  }
 
 
   public async login(req: Request, res: Response): Promise<Response> {
@@ -210,7 +220,7 @@ export class AuthController {
           message: "Invalid email or password",
         });
       }
-      
+
       // if (!user.isVerified) {
       //   return res.status(401).json({
       //     error: "Authentication failed",
@@ -269,10 +279,10 @@ export class AuthController {
         });
       }
       const resetToken = generateVerificationToken();
-      
+
       const resetExpiry = new Date();
       resetExpiry.setHours(resetExpiry.getHours() + 1);
-      
+
       user.resetPasswordToken = resetToken;
       user.resetPasswordExpiry = resetExpiry;
       await user.save();
@@ -308,8 +318,8 @@ export class AuthController {
       const { token } = req.params;
       const { password } = req.body;
 
-      const user = await User.findOne({ 
-        where: { 
+      const user = await User.findOne({
+        where: {
           resetPasswordToken: token,
         }
       });
@@ -834,5 +844,5 @@ export class AuthController {
       });
     }
   }
- 
+
 }
