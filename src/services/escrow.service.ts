@@ -531,6 +531,46 @@ class EscrowService {
     // ----------------------------------------------------------
 
     /**
+     * Re-initialize a Paystack payment for a pending escrow.
+     * Used when the original checkout session has expired.
+     * Generates a new reference and payment URL, updating the escrow record.
+     */
+    async reinitializePayment(
+        escrowId: number,
+        buyerId: number
+    ): Promise<{ paymentUrl: string; reference: string }> {
+        const escrow = await EscrowTransaction.findOne({ where: { id: escrowId } });
+        if (!escrow) throw new EscrowNotFoundError(escrowId);
+        if (escrow.buyerId !== buyerId) throw new EscrowAuthorizationError("Only the buyer can reinitialize payment");
+        if (escrow.status !== EscrowStatus.PENDING) {
+            throw new EscrowValidationError(`Cannot reinitialize payment for an escrow in "${escrow.status}" status`);
+        }
+
+        const buyer = await User.findOneOrFail({ where: { id: buyerId } });
+
+        // Generate a fresh reference and new Paystack checkout session
+        const newReference = generateReference("PAY", escrowId);
+        const paymentResult = await paystackService.initializePayment({
+            email: buyer.email,
+            amount: escrow.totalAmount,
+            reference: newReference,
+            metadata: { escrowId: escrow.id, type: "escrow_payment" },
+        });
+
+        // Update escrow with the new reference and access code
+        escrow.paystackPaymentRef = newReference;
+        escrow.paystackAccessCode = paymentResult.access_code;
+        await escrow.save();
+
+        console.log(`[EscrowService] Re-initialized payment for escrow #${escrowId}. New ref: ${newReference}`);
+
+        return {
+            paymentUrl: paymentResult.authorization_url,
+            reference: newReference,
+        };
+    }
+
+    /**
      * Verify a Paystack payment and mark escrow as funded.
      *
      * Phase 1: buyer manually triggers this after completing payment.
@@ -540,6 +580,7 @@ class EscrowService {
      */
     async verifyAndMarkFunded(
         escrowId: number,
+
         buyerId: number
     ): Promise<EscrowTransaction> {
         // ─── Step 1: Fetch escrow WITHOUT a transaction first ─────────────

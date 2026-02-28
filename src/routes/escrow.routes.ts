@@ -226,6 +226,37 @@ router.get("/api/escrow/:id/payment-url", authenticate, escrowController.getPaym
 
 /**
  * @swagger
+ * /api/escrow/{id}/reinitialize-payment:
+ *   post:
+ *     summary: Re-generate a Paystack payment URL for an expired checkout session
+ *     description: Creates a new Paystack checkout session for a pending escrow. Use this when the original payment URL has expired.
+ *     tags: [Escrow]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: New payment URL generated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean }
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     paymentUrl: { type: string }
+ *                     reference: { type: string }
+ */
+router.post("/api/escrow/:id/reinitialize-payment", authenticate, escrowController.reinitializePayment);
+
+/**
+ * @swagger
  * /api/escrow/{id}/verify-payment:
  *   post:
  *     summary: Verify buyer payment and fund escrow (Phase 1 manual flow)

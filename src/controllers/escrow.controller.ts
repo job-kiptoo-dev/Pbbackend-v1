@@ -186,6 +186,34 @@ class EscrowController {
     };
 
     /**
+     * POST /api/escrow/:id/reinitialize-payment
+     * Generate a new Paystack checkout URL for a pending escrow
+     * whose original session has expired.
+     */
+    reinitializePayment = async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const escrowId = parseInt(req.params.id, 10);
+            if (isNaN(escrowId)) {
+                return res.status(400).json({ success: false, error: "Invalid escrow ID" });
+            }
+
+            const result = await escrowService.reinitializePayment(escrowId, req.userId!);
+
+            return res.status(200).json({
+                success: true,
+                message: "New payment session created. Please complete the payment using the URL below.",
+                data: {
+                    escrowId,
+                    paymentUrl: result.paymentUrl,
+                    reference: result.reference,
+                },
+            });
+        } catch (error) {
+            return this.handleError(error, res);
+        }
+    };
+
+    /**
      * POST /api/escrow/:id/verify-payment
      * Buyer verifies their Paystack payment (Phase 1 manual flow).
      */
