@@ -631,10 +631,13 @@ class EscrowService {
         await queryRunner.startTransaction();
 
         try {
-            const escrow = await queryRunner.manager.findOne(EscrowTransaction, {
-                where: { id: escrowId },
-                lock: { mode: "pessimistic_write" },
-            });
+            // Using QueryBuilder for pessimistic lock to avoid eager join conflicts
+            // PostgreSQL does not allow FOR UPDATE on the nullable side of an outer join.
+            const escrow = await queryRunner.manager
+                .createQueryBuilder(EscrowTransaction, "escrow")
+                .setLock("pessimistic_write")
+                .where("escrow.id = :id", { id: escrowId })
+                .getOne();
 
             if (!escrow) throw new EscrowNotFoundError(escrowId);
 
@@ -662,18 +665,8 @@ class EscrowService {
 
             await queryRunner.commitTransaction();
 
-            // Fire-and-forget notification (never block the response)
-            notificationService.create({
-                userId: escrow.sellerId,
-                type: "escrow.funded",
-                title: "Payment Received",
-                message: `Payment received for "${escrow.title}". You can start working now.`,
-                escrowId: escrow.id,
-            }).catch((err) =>
-                console.error("[EscrowService] Notification failed after funding:", err)
-            );
-
-            return escrow;
+            // Reload the entity with eager relations for the response
+            return await this.getEscrowById(escrow.id, buyerId);
         } catch (error) {
             console.error(`[EscrowService] Failed to mark escrow #${escrowId} as funded:`, error);
             try {
@@ -701,10 +694,11 @@ class EscrowService {
         await queryRunner.startTransaction();
 
         try {
-            const escrow = await queryRunner.manager.findOne(EscrowTransaction, {
-                where: { id: escrowId },
-                lock: { mode: "pessimistic_write" },
-            });
+            const escrow = await queryRunner.manager
+                .createQueryBuilder(EscrowTransaction, "escrow")
+                .setLock("pessimistic_write")
+                .where("escrow.id = :id", { id: escrowId })
+                .getOne();
 
             if (!escrow) throw new EscrowNotFoundError(escrowId);
             if (escrow.sellerId !== sellerId) {
@@ -759,10 +753,11 @@ class EscrowService {
         await queryRunner.startTransaction();
 
         try {
-            const escrow = await queryRunner.manager.findOne(EscrowTransaction, {
-                where: { id: escrowId },
-                lock: { mode: "pessimistic_write" },
-            });
+            const escrow = await queryRunner.manager
+                .createQueryBuilder(EscrowTransaction, "escrow")
+                .setLock("pessimistic_write")
+                .where("escrow.id = :id", { id: escrowId })
+                .getOne();
 
             if (!escrow) throw new EscrowNotFoundError(escrowId);
             if (escrow.sellerId !== sellerId) {
@@ -829,10 +824,11 @@ class EscrowService {
         await queryRunner.startTransaction();
 
         try {
-            const escrow = await queryRunner.manager.findOne(EscrowTransaction, {
-                where: { id: escrowId },
-                lock: { mode: "pessimistic_write" },
-            });
+            const escrow = await queryRunner.manager
+                .createQueryBuilder(EscrowTransaction, "escrow")
+                .setLock("pessimistic_write")
+                .where("escrow.id = :id", { id: escrowId })
+                .getOne();
 
             if (!escrow) throw new EscrowNotFoundError(escrowId);
 
@@ -961,10 +957,11 @@ class EscrowService {
         await queryRunner.startTransaction();
 
         try {
-            const escrow = await queryRunner.manager.findOne(EscrowTransaction, {
-                where: { id: escrowId },
-                lock: { mode: "pessimistic_write" },
-            });
+            const escrow = await queryRunner.manager
+                .createQueryBuilder(EscrowTransaction, "escrow")
+                .setLock("pessimistic_write")
+                .where("escrow.id = :id", { id: escrowId })
+                .getOne();
 
             if (!escrow) throw new EscrowNotFoundError(escrowId);
 
@@ -1053,10 +1050,11 @@ class EscrowService {
         await queryRunner.startTransaction();
 
         try {
-            const escrow = await queryRunner.manager.findOne(EscrowTransaction, {
-                where: { id: escrowId },
-                lock: { mode: "pessimistic_write" },
-            });
+            const escrow = await queryRunner.manager
+                .createQueryBuilder(EscrowTransaction, "escrow")
+                .setLock("pessimistic_write")
+                .where("escrow.id = :id", { id: escrowId })
+                .getOne();
 
             if (!escrow) throw new EscrowNotFoundError(escrowId);
             if (escrow.status !== EscrowStatus.DISPUTED) {
@@ -1132,10 +1130,11 @@ class EscrowService {
         await queryRunner.startTransaction();
 
         try {
-            const escrow = await queryRunner.manager.findOne(EscrowTransaction, {
-                where: { id: escrowId },
-                lock: { mode: "pessimistic_write" },
-            });
+            const escrow = await queryRunner.manager
+                .createQueryBuilder(EscrowTransaction, "escrow")
+                .setLock("pessimistic_write")
+                .where("escrow.id = :id", { id: escrowId })
+                .getOne();
 
             if (!escrow) throw new EscrowNotFoundError(escrowId);
 
@@ -1206,10 +1205,11 @@ class EscrowService {
         await queryRunner.startTransaction();
 
         try {
-            const escrow = await queryRunner.manager.findOne(EscrowTransaction, {
-                where: { id: escrowId },
-                lock: { mode: "pessimistic_write" },
-            });
+            const escrow = await queryRunner.manager
+                .createQueryBuilder(EscrowTransaction, "escrow")
+                .setLock("pessimistic_write")
+                .where("escrow.id = :id", { id: escrowId })
+                .getOne();
 
             if (!escrow) throw new EscrowNotFoundError(escrowId);
 
@@ -1274,10 +1274,11 @@ class EscrowService {
         await queryRunner.startTransaction();
 
         try {
-            const escrow = await queryRunner.manager.findOne(EscrowTransaction, {
-                where: { id: escrowId },
-                lock: { mode: "pessimistic_write" },
-            });
+            const escrow = await queryRunner.manager
+                .createQueryBuilder(EscrowTransaction, "escrow")
+                .setLock("pessimistic_write")
+                .where("escrow.id = :id", { id: escrowId })
+                .getOne();
 
             if (!escrow) throw new EscrowNotFoundError(escrowId);
             if (escrow.sellerId !== sellerId) {
@@ -1340,10 +1341,11 @@ class EscrowService {
         await queryRunner.startTransaction();
 
         try {
-            const escrow = await queryRunner.manager.findOne(EscrowTransaction, {
-                where: { id: escrowId },
-                lock: { mode: "pessimistic_write" },
-            });
+            const escrow = await queryRunner.manager
+                .createQueryBuilder(EscrowTransaction, "escrow")
+                .setLock("pessimistic_write")
+                .where("escrow.id = :id", { id: escrowId })
+                .getOne();
 
             if (!escrow) throw new EscrowNotFoundError(escrowId);
 
