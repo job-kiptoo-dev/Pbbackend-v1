@@ -21,8 +21,8 @@ const options = {
         description: "Development server",
       },
       {
-        url: "https://api.backend-paza.com",
-        description: "Production server",
+        url: "https://pbbackend-v1.onrender.com",
+        description: "Production server (Render)",
       },
     ],
     components: {
