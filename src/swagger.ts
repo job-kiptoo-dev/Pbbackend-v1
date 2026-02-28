@@ -24,6 +24,10 @@ const options = {
         url: "https://pbbackend-v1.onrender.com",
         description: "Production server (Render)",
       },
+      {
+        url: "https://api.paza.social",
+        description: "Production server (Render)",
+      },
     ],
     components: {
       securitySchemes: {
