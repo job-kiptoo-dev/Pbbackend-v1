@@ -16,8 +16,10 @@ const router = Router();
  * /api/social-verification/youtube/auth:
  *   get:
  *     summary: Initiate YouTube authentication
- *     description: Redirects the user to Google OAuth consent screen for YouTube authentication
+ *     description: Redirects the user to Google OAuth consent screen. REQUIRES a valid JWT token.
  *     tags: [SocialVerification]
+ *     security:
+ *       - BearerAuth: []
  *     responses:
  *       302:
  *         description: Redirects to Google OAuth consent screen
