@@ -13,8 +13,11 @@ RUN npm install
 # Copy source code
 COPY . .
 
-# Expose the port
-EXPOSE 8000
+# Build TypeScript to JavaScript
+RUN npm run build
 
-# For development with hot reload
-CMD ["npm", "run", "dev"]
+# Expose the port
+EXPOSE 10000
+
+# Run compiled production server
+CMD ["npm", "start"]
