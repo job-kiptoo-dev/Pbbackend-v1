@@ -18,17 +18,23 @@ export const authenticate = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    // Get token from header
+    // Get token from header or query parameter
+    let token = "";
     const authHeader = req.header("Authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      res.status(401).json({
-        error: "Authentication failed",
-        message: "Authorization header missing or invalid format",
-      });
-      return
+
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      token = authHeader.replace("Bearer ", "");
+    } else if (req.query.token) {
+      token = req.query.token as string;
     }
 
-    const token = authHeader.replace("Bearer ", "");
+    if (!token) {
+      res.status(401).json({
+        error: "Authentication failed",
+        message: "Authorization token missing (header or query param)",
+      });
+      return;
+    }
 
     // Verify token
     const decoded = jwt.verify(
