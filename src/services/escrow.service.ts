@@ -542,56 +542,69 @@ class EscrowService {
         escrowId: number,
         buyerId: number
     ): Promise<EscrowTransaction> {
+        // ─── Step 1: Fetch escrow WITHOUT a transaction first ─────────────
+        // We do a quick read to validate state and get the Paystack reference
+        // BEFORE acquiring a pessimistic lock and calling external APIs.
+        const rawEscrow = await EscrowTransaction.findOne({ where: { id: escrowId } });
+
+        if (!rawEscrow) throw new EscrowNotFoundError(escrowId);
+
+        // Idempotent: already funded — return early without touching the DB
+        if (
+            rawEscrow.status === EscrowStatus.FUNDED ||
+            rawEscrow.status === EscrowStatus.IN_PROGRESS ||
+            rawEscrow.status === EscrowStatus.DELIVERED ||
+            rawEscrow.status === EscrowStatus.RELEASED
+        ) {
+            return rawEscrow;
+        }
+
+        if (rawEscrow.buyerId !== buyerId) {
+            throw new EscrowAuthorizationError("Only the buyer can verify payment");
+        }
+
+        if (rawEscrow.status !== EscrowStatus.PENDING) {
+            throw new EscrowStateError(rawEscrow.status, "verify payment");
+        }
+
+        if (!rawEscrow.paystackPaymentRef) {
+            throw new EscrowValidationError("No payment reference found on this escrow");
+        }
+
+        // ─── Step 2: Call Paystack OUTSIDE the DB transaction ──────────────
+        // This way, if Paystack fails, we throw a clean PaystackError (→ 502)
+        // without risk of it being masked by a failed rollback call.
+        console.log(`[EscrowService] Verifying Paystack payment for escrow #${escrowId}, ref: ${rawEscrow.paystackPaymentRef}`);
+        const transaction = await paystackService.verifyPayment(rawEscrow.paystackPaymentRef);
+        console.log(`[EscrowService] Paystack verification result: ${transaction.status}`);
+
+        if (transaction.status !== "success") {
+            throw new EscrowValidationError(
+                `Payment not yet successful. Paystack status: "${transaction.status}". Please complete the payment first.`
+            );
+        }
+
+        // ─── Step 3: Update DB in a transaction with pessimistic lock ─────
         const queryRunner = AppDataSource.createQueryRunner();
         await queryRunner.connect();
         await queryRunner.startTransaction();
 
         try {
-            // Lock the escrow row to prevent concurrent verification
             const escrow = await queryRunner.manager.findOne(EscrowTransaction, {
                 where: { id: escrowId },
                 lock: { mode: "pessimistic_write" },
             });
 
-            if (!escrow) {
-                throw new EscrowNotFoundError(escrowId);
-            }
+            if (!escrow) throw new EscrowNotFoundError(escrowId);
 
-            // Idempotent: already funded
-            if (escrow.status === EscrowStatus.FUNDED ||
-                escrow.status === EscrowStatus.IN_PROGRESS ||
-                escrow.status === EscrowStatus.DELIVERED ||
-                escrow.status === EscrowStatus.RELEASED) {
+            // Re-check idempotency inside the lock (another request may have funded it)
+            if (escrow.status !== EscrowStatus.PENDING) {
                 await queryRunner.rollbackTransaction();
                 return escrow;
             }
 
-            if (escrow.buyerId !== buyerId) {
-                throw new EscrowAuthorizationError("Only the buyer can verify payment");
-            }
-
-            if (escrow.status !== EscrowStatus.PENDING) {
-                throw new EscrowStateError(escrow.status, "verify payment");
-            }
-
-            if (!escrow.paystackPaymentRef) {
-                throw new EscrowValidationError("No payment reference found on this escrow");
-            }
-
-            // Verify with Paystack
-            const transaction = await paystackService.verifyPayment(
-                escrow.paystackPaymentRef
-            );
-
-            if (transaction.status !== "success") {
-                throw new EscrowValidationError(
-                    `Payment not yet successful. Current status: ${transaction.status}`
-                );
-            }
-
-            // Mark as funded
             escrow.status = EscrowStatus.FUNDED;
-
+            escrow.paymentConfirmedAt = new Date();
             await queryRunner.manager.save(escrow);
 
             await this.logEvent(queryRunner, {
@@ -602,23 +615,31 @@ class EscrowService {
                 metadata: {
                     paystackRef: escrow.paystackPaymentRef,
                     paystackStatus: transaction.status,
+                    paystackTxId: transaction.id,
                 },
             });
 
             await queryRunner.commitTransaction();
 
-            // Notify seller that payment is received
-            await notificationService.create({
+            // Fire-and-forget notification (never block the response)
+            notificationService.create({
                 userId: escrow.sellerId,
                 type: "escrow.funded",
                 title: "Payment Received",
                 message: `Payment received for "${escrow.title}". You can start working now.`,
                 escrowId: escrow.id,
-            });
+            }).catch((err) =>
+                console.error("[EscrowService] Notification failed after funding:", err)
+            );
 
             return escrow;
         } catch (error) {
-            await queryRunner.rollbackTransaction();
+            console.error(`[EscrowService] Failed to mark escrow #${escrowId} as funded:`, error);
+            try {
+                await queryRunner.rollbackTransaction();
+            } catch (rollbackError) {
+                console.error("[EscrowService] Rollback also failed:", rollbackError);
+            }
             throw error;
         } finally {
             await queryRunner.release();
