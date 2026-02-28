@@ -194,6 +194,38 @@ router.post(
 
 /**
  * @swagger
+ * /api/escrow/{id}/payment-url:
+ *   get:
+ *     summary: Get Paystack payment URL for a pending escrow
+ *     description: Retrieves the Paystack checkout URL to complete a pending payment. Only works for escrows in 'pending' status.
+ *     tags: [Escrow]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Payment URL retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success: { type: boolean }
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     paymentUrl: { type: string }
+ *                     reference: { type: string }
+ *                     totalAmountKES: { type: number }
+ */
+router.get("/api/escrow/:id/payment-url", authenticate, escrowController.getPaymentUrl);
+
+/**
+ * @swagger
  * /api/escrow/{id}/verify-payment:
  *   post:
  *     summary: Verify buyer payment and fund escrow (Phase 1 manual flow)

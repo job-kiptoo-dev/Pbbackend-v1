@@ -141,6 +141,51 @@ class EscrowController {
     // ----------------------------------------------------------
 
     /**
+     * GET /api/escrow/:id/payment-url
+     * Retrieve the Paystack payment URL for a pending escrow.
+     * Useful for test mode when the URL has been lost.
+     */
+    getPaymentUrl = async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const escrowId = parseInt(req.params.id, 10);
+            if (isNaN(escrowId)) {
+                return res.status(400).json({ success: false, error: "Invalid escrow ID" });
+            }
+
+            const escrow = await escrowService.getEscrowById(escrowId, req.userId!);
+
+            if (escrow.status !== "pending") {
+                return res.status(400).json({
+                    success: false,
+                    error: `Escrow is not pending payment. Current status: ${escrow.status}`,
+                });
+            }
+
+            if (!escrow.paystackAccessCode) {
+                return res.status(400).json({
+                    success: false,
+                    error: "No Paystack payment record found for this escrow",
+                });
+            }
+
+            const paymentUrl = `https://checkout.paystack.com/${escrow.paystackAccessCode}`;
+
+            return res.status(200).json({
+                success: true,
+                data: {
+                    escrowId,
+                    status: escrow.status,
+                    paymentUrl,
+                    reference: escrow.paystackPaymentRef,
+                    totalAmountKES: Number(escrow.totalAmount) / 100,
+                },
+            });
+        } catch (error) {
+            return this.handleError(error, res);
+        }
+    };
+
+    /**
      * POST /api/escrow/:id/verify-payment
      * Buyer verifies their Paystack payment (Phase 1 manual flow).
      */
