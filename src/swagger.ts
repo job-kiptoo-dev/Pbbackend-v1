@@ -17,16 +17,16 @@ const options = {
     },
     servers: [
       {
-        url: `http://localhost:${process.env.PORT || 5000}`,
-        description: "Development server",
+        url: "https://api.paza.social",
+        description: "Production server",
       },
       {
         url: "https://pbbackend-v1.onrender.com",
-        description: "Production server (Render)",
+        description: "Production server (Render fallback)",
       },
       {
-        url: "https://api.paza.social",
-        description: "Production server (Render)",
+        url: `http://localhost:${process.env.PORT || 5000}`,
+        description: "Development server",
       },
     ],
     components: {
