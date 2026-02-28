@@ -20,7 +20,7 @@ const router = Router();
  *     description: Creates a new job posting (requires authentication)
  *     tags: [Jobs]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -160,7 +160,7 @@ router.get("/:id", jobController.getJobById);
  *     description: Updates job details (requires authentication)
  *     tags: [Jobs]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -206,7 +206,7 @@ router.put("/:id", authenticate, jobController.updateJob);
  *     description: Deletes a job and all its proposals (requires authentication)
  *     tags: [Jobs]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -236,7 +236,7 @@ router.delete("/:id", authenticate, jobController.deleteJob);
  *     description: Creates a new proposal for a job (requires authentication)
  *     tags: [Jobs]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -317,7 +317,7 @@ router.get("/:id/proposals", jobController.getJobProposals);
  *     description: Updates the status of a proposal (requires authentication)
  *     tags: [Jobs]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -366,7 +366,7 @@ router.put("/:id/proposals/:proposalId", authenticate, jobController.updatePropo
  *     description: Deletes a proposal from a job (requires authentication)
  *     tags: [Jobs]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

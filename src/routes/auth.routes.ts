@@ -691,7 +691,7 @@ router.post(
  *     description: Starts the YouTube verification process and returns a verification token
  *     tags: [Authentication]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: Verification initiated successfully
@@ -759,7 +759,7 @@ router.post(
  *     description: Completes the YouTube verification process by checking the channel for the token
  *     tags: [Authentication]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -844,7 +844,7 @@ router.post(
  *     description: Allows a logged-in user to change their password
  *     tags: [Authentication]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -928,7 +928,7 @@ router.post(
  *     description: Updates the account type for an authenticated user (Individual, Business, Creator, or None)
  *     tags: [Authentication]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -1033,7 +1033,7 @@ router.put(
  *     description: Retrieves the authenticated user's creator profile
  *     tags: [Authentication]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: Creator profile retrieved
@@ -1056,7 +1056,7 @@ router.get(
  *     description: Update creator name, about, and main field
  *     tags: [Authentication]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -1092,7 +1092,7 @@ router.put(
  *     description: Update social media handles and followers
  *     tags: [Authentication]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -1138,7 +1138,7 @@ router.put(
  *     description: Update experience, milestones, and collaborations
  *     tags: [Authentication]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -1174,7 +1174,7 @@ router.put(
  *     description: Update category, subcategory, core values, topics
  *     tags: [Authentication]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -1224,7 +1224,7 @@ router.put(
  *     description: Update avatar and preview URLs/files
  *     tags: [Authentication]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -1258,7 +1258,7 @@ router.put(
  *     description: Update all creator profile fields in one request
  *     tags: [Authentication]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:

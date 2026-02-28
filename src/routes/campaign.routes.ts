@@ -19,7 +19,7 @@ const router = Router();
  *     description: Creates a new campaign with basic information
  *     tags: [Campaigns]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -157,7 +157,7 @@ router.get("/:id", campaignController.getCampaignById);
  *     description: Updates campaign details
  *     tags: [Campaigns]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -203,7 +203,7 @@ router.put("/:id", authenticate, campaignController.updateCampaign);
  *     description: Deletes a campaign and all its related data
  *     tags: [Campaigns]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -229,7 +229,7 @@ router.delete("/:id", authenticate, campaignController.deleteCampaign);
  *     description: Creates a new milestone for a campaign
  *     tags: [Campaigns]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -289,7 +289,7 @@ router.post("/:id/milestones", authenticate, campaignController.addMilestone);
  *     description: Updates a milestone in a campaign
  *     tags: [Campaigns]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -340,7 +340,7 @@ router.put("/:id/milestones/:milestoneId", authenticate, campaignController.upda
  *     description: Deletes a milestone from a campaign
  *     tags: [Campaigns]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -372,7 +372,7 @@ router.delete("/:id/milestones/:milestoneId", authenticate, campaignController.d
  *     description: Creates a new team for a campaign
  *     tags: [Campaigns]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -419,7 +419,7 @@ router.post("/:id/teams", authenticate, campaignController.addTeam);
  *     description: Deletes a team from a campaign
  *     tags: [Campaigns]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -514,7 +514,7 @@ router.get("/:id/feedback", campaignController.getCampaignFeedback);
  *     description: Deletes feedback from a campaign
  *     tags: [Campaigns]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

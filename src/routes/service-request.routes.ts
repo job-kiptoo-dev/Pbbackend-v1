@@ -19,7 +19,7 @@ const router = Router();
  *     description: Creator posts a service request within their campaign (e.g., need a videographer)
  *     tags: [Service Requests]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -132,7 +132,7 @@ router.get("/search", (req, res) => serviceRequestController.searchServiceReques
  *     summary: Get current user's service requests
  *     tags: [Service Requests]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: Your service requests
@@ -166,7 +166,7 @@ router.get("/:id", (req, res) => serviceRequestController.getServiceRequest(req,
  *     summary: Update a service request
  *     tags: [Service Requests]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -192,7 +192,7 @@ router.put("/:id", authenticate, (req, res) => serviceRequestController.updateSe
  *     summary: Update service request status
  *     tags: [Service Requests]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -225,7 +225,7 @@ router.put("/:id/status", authenticate, (req, res) => serviceRequestController.u
  *     summary: Delete a service request
  *     tags: [Service Requests]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

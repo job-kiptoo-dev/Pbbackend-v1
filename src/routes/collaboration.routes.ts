@@ -19,7 +19,7 @@ const router = Router();
  *     description: Send an invitation to collaborate on a campaign or business
  *     tags: [Collaborations]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -76,7 +76,7 @@ router.post("/invite", authenticate, collaborationController.createInvitation);
  *     description: Accept a pending collaboration invitation
  *     tags: [Collaborations]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -109,7 +109,7 @@ router.post("/accept", authenticate, collaborationController.acceptInvitation);
  *     description: Reject a pending collaboration invitation
  *     tags: [Collaborations]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -142,7 +142,7 @@ router.post("/reject", authenticate, collaborationController.rejectInvitation);
  *     description: Retrieve all invitations for the current user
  *     tags: [Collaborations]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: Invitations retrieved successfully
@@ -161,7 +161,7 @@ router.get("/my-invitations", authenticate, collaborationController.getMyInvitat
  *     description: Retrieve all pending invitations for the current user
  *     tags: [Collaborations]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: Pending invitations retrieved successfully
@@ -228,7 +228,7 @@ router.get("/business/:businessId", collaborationController.getBusinessCollabora
  *     description: Update the role of a collaborator
  *     tags: [Collaborations]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: collaborationId
@@ -269,7 +269,7 @@ router.put("/:collaborationId/role", authenticate, collaborationController.updat
  *     description: Remove a collaborator from a campaign or business
  *     tags: [Collaborations]
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
  *     parameters:
  *       - in: path
  *         name: collaborationId
