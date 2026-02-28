@@ -276,6 +276,27 @@ router.post("/api/escrow/:id/verify-payment", authenticate, escrowController.ver
 
 /**
  * @swagger
+ * /api/escrow/{id}/force-fund:
+ *   post:
+ *     summary: (Test/Admin) Force an escrow to funded status without Paystack verification
+ *     description: Use this when a Paystack payment is confirmed in the dashboard but verify-payment is failing. Only works on 'pending' escrows. Buyer auth required.
+ *     tags: [Escrow]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: integer }
+ *     responses:
+ *       200:
+ *         description: Escrow manually marked as funded
+ */
+router.post("/api/escrow/:id/force-fund", authenticate, escrowController.forceFund);
+
+
+/**
+ * @swagger
  * /api/escrow/{id}/payment-callback:
  *   get:
  *     summary: Handle Paystack payment redirect

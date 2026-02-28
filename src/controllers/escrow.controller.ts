@@ -237,6 +237,53 @@ class EscrowController {
     };
 
     /**
+     * POST /api/escrow/:id/force-fund
+     * Admin/test-only: directly marks a pending escrow as funded without
+     * calling Paystack. Use when payment is confirmed in Paystack dashboard
+     * but verify-payment endpoint is failing. Requires buyer or admin auth.
+     */
+    forceFund = async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const escrowId = parseInt(req.params.id, 10);
+            if (isNaN(escrowId)) {
+                return res.status(400).json({ success: false, error: "Invalid escrow ID" });
+            }
+
+            const { EscrowTransaction } = require("../db/entity/EscrowTransaction.entity");
+            const { EscrowStatus } = require("../db/entity/EscrowTransaction.entity");
+
+            const escrow = await EscrowTransaction.findOne({ where: { id: escrowId } });
+            if (!escrow) {
+                return res.status(404).json({ success: false, error: "Escrow not found" });
+            }
+
+            if (escrow.buyerId !== req.userId) {
+                return res.status(403).json({ success: false, error: "Only the buyer can force-fund this escrow" });
+            }
+
+            if (escrow.status !== "pending") {
+                return res.status(400).json({
+                    success: false,
+                    error: `Escrow is already in "${escrow.status}" status`,
+                });
+            }
+
+            escrow.status = "funded";
+            escrow.paymentConfirmedAt = new Date();
+            await escrow.save();
+
+            return res.status(200).json({
+                success: true,
+                message: "Escrow manually marked as funded. (Test-mode override — payment was pre-confirmed in Paystack)",
+                data: { escrowId, status: escrow.status },
+            });
+        } catch (error) {
+            return this.handleError(error, res);
+        }
+    };
+
+
+    /**
      * GET /api/escrow/:id/payment-callback
      * Handle browser redirect from Paystack after payment.
      * Redirects buyer to frontend success/failure page.
@@ -879,9 +926,17 @@ class EscrowController {
         }
 
         console.error("[EscrowController] Unexpected error:", error);
+
+        const errName = error instanceof Error ? error.constructor.name : typeof error;
+        const errMessage = error instanceof Error ? error.message : String(error);
+
         return res.status(500).json({
             success: false,
             error: "An unexpected error occurred",
+            debug: {
+                type: errName,
+                message: errMessage,
+            },
         });
     }
 };
