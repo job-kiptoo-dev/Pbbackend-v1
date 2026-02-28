@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { authenticate } from "../middleware/auth.middleware";
 import { youtubeAuthController, youtubeAuthCallbackController } from "../controllers/social-verification.controller";
 
 const router = Router();
@@ -31,7 +32,7 @@ const router = Router();
  *                   type: string
  *                   example: Internal server error
  */
-router.get("/youtube/auth", youtubeAuthController);
+router.get("/youtube/auth", authenticate, youtubeAuthController);
 
 /**
  * @swagger
