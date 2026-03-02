@@ -1,6 +1,13 @@
 import { Router } from "express";
 import { authenticate } from "../middleware/auth.middleware";
-import { youtubeAuthController, youtubeAuthCallbackController } from "../controllers/social-verification.controller";
+import {
+    youtubeAuthController,
+    youtubeAuthCallbackController,
+    facebookAuthController,
+    facebookAuthCallbackController,
+    instagramAuthController,
+    instagramAuthCallbackController
+} from "../controllers/social-verification.controller";
 
 const router = Router();
 
@@ -25,14 +32,6 @@ const router = Router();
  *         description: Redirects to Google OAuth consent screen
  *       500:
  *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Internal server error
  */
 router.get("/youtube/auth", authenticate, youtubeAuthController);
 
@@ -41,7 +40,6 @@ router.get("/youtube/auth", authenticate, youtubeAuthController);
  * /api/social-verification/youtube/callback:
  *   get:
  *     summary: Handle YouTube authentication callback
- *     description: Processes the callback from Google OAuth, verifies the YouTube channel, and stores the verification data
  *     tags: [SocialVerification]
  *     parameters:
  *       - in: query
@@ -49,55 +47,76 @@ router.get("/youtube/auth", authenticate, youtubeAuthController);
  *         required: true
  *         schema:
  *           type: string
- *         description: Authorization code from Google OAuth
  *     responses:
  *       200:
  *         description: YouTube channel verified successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: YouTube account verified successfully
- *                 channelTitle:
- *                   type: string
- *                   example: My YouTube Channel
- *                 isVerified:
- *                   type: boolean
- *                   example: true
- *       400:
- *         description: No YouTube channel found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: No YouTube channel found
- *       404:
- *         description: User not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: User not found
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Internal server error
  */
 router.get("/youtube/callback", youtubeAuthCallbackController);
+
+/**
+ * @swagger
+ * /api/social-verification/facebook/auth:
+ *   get:
+ *     summary: Initiate Facebook authentication
+ *     description: Redirects the user to Facebook OAuth dialog. REQUIRES a valid JWT token.
+ *     tags: [SocialVerification]
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       302:
+ *         description: Redirects to Facebook Login
+ */
+router.get("/facebook/auth", authenticate, facebookAuthController);
+
+/**
+ * @swagger
+ * /api/social-verification/facebook/callback:
+ *   get:
+ *     summary: Handle Facebook authentication callback
+ *     tags: [SocialVerification]
+ *     parameters:
+ *       - in: query
+ *         name: code
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Facebook account verified successfully
+ */
+router.get("/facebook/callback", facebookAuthCallbackController);
+
+/**
+ * @swagger
+ * /api/social-verification/instagram/auth:
+ *   get:
+ *     summary: Initiate Instagram authentication
+ *     description: Redirects to Facebook Login for Instagram Graph API access. REQUIRES a valid JWT token.
+ *     tags: [SocialVerification]
+ *     security:
+ *       - BearerAuth: []
+ *     responses:
+ *       302:
+ *         description: Redirects to Facebook Login
+ */
+router.get("/instagram/auth", authenticate, instagramAuthController);
+
+/**
+ * @swagger
+ * /api/social-verification/instagram/callback:
+ *   get:
+ *     summary: Handle Instagram authentication callback
+ *     tags: [SocialVerification]
+ *     parameters:
+ *       - in: query
+ *         name: code
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Instagram account verified successfully
+ */
+router.get("/instagram/callback", instagramAuthCallbackController);
 
 export default router;
