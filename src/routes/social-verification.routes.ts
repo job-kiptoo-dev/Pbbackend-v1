@@ -23,10 +23,15 @@ const router = Router();
  * /api/social-verification/youtube/auth:
  *   get:
  *     summary: Initiate YouTube authentication
- *     description: Redirects the user to Google OAuth consent screen. REQUIRES a valid JWT token.
+ *     description: Redirects to Google OAuth. Best called via browser address bar.
  *     tags: [SocialVerification]
- *     security:
- *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Your JWT token for authentication
  *     responses:
  *       302:
  *         description: Redirects to Google OAuth consent screen
@@ -58,10 +63,15 @@ router.get("/youtube/callback", youtubeAuthCallbackController);
  * /api/social-verification/facebook/auth:
  *   get:
  *     summary: Initiate Facebook authentication
- *     description: Redirects the user to Facebook OAuth dialog. REQUIRES a valid JWT token.
+ *     description: Redirects to Facebook Login. Best called via browser address bar.
  *     tags: [SocialVerification]
- *     security:
- *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Your JWT token for authentication
  *     responses:
  *       302:
  *         description: Redirects to Facebook Login
@@ -91,10 +101,15 @@ router.get("/facebook/callback", facebookAuthCallbackController);
  * /api/social-verification/instagram/auth:
  *   get:
  *     summary: Initiate Instagram authentication
- *     description: Redirects to Facebook Login for Instagram Graph API access. REQUIRES a valid JWT token.
+ *     description: Redirects to Facebook Login for IG access. Best called via browser address bar.
  *     tags: [SocialVerification]
- *     security:
- *       - BearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Your JWT token for authentication
  *     responses:
  *       302:
  *         description: Redirects to Facebook Login
